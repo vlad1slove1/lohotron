@@ -1,11 +1,28 @@
 {
-  "name": "lohotron",
+  "name": "wheel_spinner",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "spinner for holding drawings and determining the winners",
+  "main": "src/init.js",
+  "bin": {
+    "wheel_spinner": "bin/spinner.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vlad1slove1/lohotron.git"
+  },
   "author": "Vladislav Kishchenko",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vlad1slove1/lohotron/issues"
+  },
+  "homepage": "https://github.com/vlad1slove1/lohotron#readme",
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.4"
+  }
 }
