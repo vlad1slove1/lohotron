@@ -2,6 +2,7 @@
   "name": "wheel_spinner",
   "version": "1.0.0",
   "description": "spinner for holding drawings and determining the winners",
+  "type": "module",
   "main": "src/init.js",
   "bin": {
     "wheel_spinner": "bin/spinner.js"
