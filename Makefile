@@ -9,6 +9,3 @@ publish:
 
 lint:
 				npx eslint .
-
-spinner:
-				node bin/spinner.js
