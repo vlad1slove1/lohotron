@@ -1,16 +1,4 @@
-import { getRandomColor } from '../src/utils.js';
-
 let counter = 0;
-const colors = [
-  'hsl(197 30% 43%)',
-  'hsl(173 58% 39%)',
-  'hsl(43 74% 66%)',
-  'hsl(27 87% 67%)',
-  'hsl(12 76% 61%)',
-  'hsl(350 60% 52%)',
-  'hsl(91 43% 54%)',
-  'hsl(140 36% 74%)',
-];
 
 export default [
   {
@@ -19,7 +7,6 @@ export default [
     phone: '79184829267',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Phil',
@@ -27,7 +14,6 @@ export default [
     phone: '79188812057',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Iskhan',
@@ -35,7 +21,6 @@ export default [
     phone: '79187037652',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Chris',
@@ -43,7 +28,6 @@ export default [
     phone: '79180348860',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Doyle',
@@ -51,7 +35,6 @@ export default [
     phone: '79183022867',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Archie',
@@ -59,7 +42,6 @@ export default [
     phone: '79185995478',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'John',
@@ -67,7 +49,6 @@ export default [
     phone: '79187283815',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Cynthia',
@@ -75,7 +56,6 @@ export default [
     phone: '79185083787',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'Joe',
@@ -83,7 +63,6 @@ export default [
     phone: '79188047714',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
   {
     name: 'William',
@@ -91,6 +70,5 @@ export default [
     phone: '79180484276',
     prize: '',
     displayName: `Участник #${counter += 1}`,
-    color: getRandomColor(colors),
   },
 ];

@@ -1,87 +1,125 @@
-/* eslint-disable no-restricted-syntax */
 import collection from '../__fixtures__/collection.js';
-import { shuffle } from './utils.js';
+import { renderSpinners, renderItem } from './render.js';
 
-const shuffledCollection = shuffle(collection);
-
-const elements = {
-  spinner: document.querySelector('.spinner'),
-  doors: document.querySelectorAll('.door'),
-  startButton: document.querySelector('.start-button'),
-  resetButton: document.querySelector('.reset-button'),
+const state = {
+  running: false,
+  spinnersCount: 3,
+  collection: {
+    participants: collection, // array of objects [{}, {}, {} ...];
+    winners: [], // array of objects [{}, {}, {} ...];
+  },
 };
 
-const init = (firstInit = true, groups = 1, duration = 1) => {
-  for (const door of elements.doors) {
-    if (firstInit) {
-      door.dataset.spinned = '0';
-    } else if (door.dataset.spinned === '1') {
-      return;
+/**
+ * find all reset buttons, then find their parent nodes (spinners)
+ * on click rerender the default view of found parent node
+ */
+
+const resetButtonsHandler = () => {
+  const spinners = document.querySelectorAll('.spinner');
+
+  spinners.forEach((spinner) => {
+    const resetButton = spinner.querySelector('.reset-btn');
+
+    if (spinner.id === resetButton.id) {
+      resetButton.addEventListener('click', (event) => {
+        const { target } = event;
+        const parentSpinner = target.closest('div').parentNode;
+
+        parentSpinner.innerHTML = '';
+        document.documentElement.removeAttribute('style');
+        renderItem(parentSpinner);
+      });
     }
-
-    const boxes = door.querySelector('.boxes');
-    const boxesClone = boxes.cloneNode(false);
-    const pool = [{ name: '❓' }];
-
-    const items = shuffledCollection.map((item) => {
-      const obj = {};
-      obj.name = item.displayName;
-      obj.color = item.color;
-
-      return obj;
-    });
-
-    if (!firstInit) {
-      const arr = [];
-      for (let i = 0; i < (groups > 0 ? groups : 1); i += 1) {
-        arr.push(...items);
-      }
-      pool.push(...shuffle(arr));
-
-      boxesClone.addEventListener('transitionstart', () => {
-        door.dataset.spinned = '1';
-      }, { once: true });
-
-      boxesClone.addEventListener('transitionend', () => {
-        const boxList = document.querySelectorAll('.box');
-        const boxListArr = Array.from(boxList);
-
-        const filterBoxes = (_box, index) => index > 0;
-        boxListArr.filter(filterBoxes);
-      }, { once: true });
-
-      for (let i = pool.length - 1; i >= 0; i -= 1) {
-        const box = document.createElement('div');
-        box.classList.add('box');
-        box.setAttribute('style', `background-color: ${pool[i].color}`);
-        box.style.width = `${door.clientWidth}px`;
-        box.style.height = `${door.clientHeight}px`;
-        box.textContent = pool[i].name;
-        boxesClone.appendChild(box);
-      }
-
-      boxesClone.style.transitionDuration = `${duration > 0 ? duration : 1}s`;
-      boxesClone.style.transform = `translateY(-${door.clientHeight * (pool.length - 1)}px)`;
-      door.replaceChild(boxesClone, boxes);
-    }
-  }
+  });
 };
 
-const spin = async () => {
-  init(false, 1, 2);
+/**
+ * find all start buttons, then find their parent nodes (spinners)
+ * on click launch scroll function
+ */
 
-  for (const door of elements.doors) {
-    const boxes = door.querySelector('.boxes');
-    const duration = parseInt(boxes.style.transitionDuration, 10);
-    boxes.style.transform = 'translateY(0)';
+const values = state.collection.participants.map((participant) => participant.displayName);
+const getRandomValue = () => Math.floor(Math.random() * values.length);
 
-    await new Promise((resolve) => setTimeout(resolve, duration * 100));
-  }
+let animationId;
+const updateAnimation = (newTime, bar) => {
+  if (animationId) clearInterval(animationId);
+
+  // eslint-disable-next-line no-return-assign, no-param-reassign
+  animationId = setInterval(() => bar.innerText = values[getRandomValue(values)], newTime * 500);
+
+  return animationId;
+};
+
+const startButtonsHandler = () => {
+  const spinners = document.querySelectorAll('.spinner');
+
+  spinners.forEach((spinner) => {
+    const startButton = spinner.querySelector('.start-btn');
+
+    if (spinner.id === startButton.id) {
+      startButton.addEventListener('click', (event) => {
+        const { target } = event;
+        const parentSpinner = target.closest('div').parentNode;
+        const bar = parentSpinner.querySelector('.bar');
+
+        state.running = true;
+        document.documentElement.style.setProperty('--speed', 5);
+        const newTime = 0.1;
+        updateAnimation(newTime, bar);
+
+        bar.classList.add('down');
+        startButton.setAttribute('disabled', true);
+
+        let currentTime = (6 - 5) * 1000;
+        let currentValue = 5;
+        let stepValue = currentTime / 5;
+        let initTime = (parseInt(Math.random() * 5, 10) + 1) * 1000;
+        let inter = 500;
+
+        const init = () => {
+          setTimeout(() => {
+            document.documentElement.style.setProperty('--speed', parseInt(currentValue - stepValue, 10));
+            setTimeout(() => {
+              document.documentElement.style.setProperty('--speed', parseInt(currentValue - (2 * stepValue), 10));
+              setTimeout(() => {
+                document.documentElement.style.setProperty('--speed', parseInt(currentValue - (3 * stepValue), 10));
+                setTimeout(() => {
+                  document.documentElement.style.setProperty('--speed', parseInt(currentValue - (4 * stepValue), 10));
+                  setTimeout(() => {
+                    document.documentElement.style.setProperty('--speed', 6);
+
+                    bar.classList.remove('down');
+                    clearInterval(animationId);
+
+                    setTimeout(() => {
+                      startButton.setAttribute('disabled', false);
+                      state.running = false;
+                      console.log(bar.innerText);
+                    }, 100);
+                  }, inter);
+                }, inter);
+              }, inter);
+            }, inter);
+          }, initTime);
+        };
+
+        init();
+      });
+    }
+  });
 };
 
 export default () => {
-  init(false, 1, 2);
+  // rendering spinners, according to state.spinnersCount
+  renderSpinners(state.spinnersCount);
 
-  elements.startButton.addEventListener('click', spin);
-  elements.resetButton.addEventListener('click', init);
+  // rendering bar, buttons and initial state to all spinners
+  const spinners = document.querySelectorAll('.spinner');
+  spinners.forEach((spinner) => renderItem(spinner));
+
+  // adding event listeners on click to buttons
+  spinners.forEach((spinner) => spinner.addEventListener('click', resetButtonsHandler));
+  spinners.forEach((spinner) => spinner.addEventListener('click', startButtonsHandler));
 };
