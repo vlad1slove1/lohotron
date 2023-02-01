@@ -29,7 +29,6 @@ export const renderItem = (spinner) => {
   buttons.setAttribute('role', 'group');
   buttons.setAttribute('aria-label', 'Basic mixed styles example');
 
-
   const startButton = document.createElement('button');
   startButton.setAttribute('type', 'button');
   startButton.setAttribute('id', spinnerID);

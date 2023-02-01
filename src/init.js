@@ -1,9 +1,10 @@
 import collection from '../__fixtures__/collection.js';
 import { renderSpinners, renderItem } from './render.js';
+import addWinnerToState from './addWinnerToState.js';
 
 const state = {
   running: false,
-  spinnersCount: 3,
+  spinnersCount: 2,
   collection: {
     participants: collection, // array of objects [{}, {}, {} ...];
     winners: [], // array of objects [{}, {}, {} ...];
@@ -34,23 +35,26 @@ const resetButtonsHandler = () => {
   });
 };
 
-/**
- * find all start buttons, then find their parent nodes (spinners)
- * on click launch scroll function
- */
-
 const values = state.collection.participants.map((participant) => participant.displayName);
 const getRandomValue = () => Math.floor(Math.random() * values.length);
 
 let animationId;
-const updateAnimation = (newTime, bar) => {
+const updateAnimation = (bar) => {
+  const displayBar = bar;
+
   if (animationId) clearInterval(animationId);
 
-  // eslint-disable-next-line no-return-assign, no-param-reassign
-  animationId = setInterval(() => bar.innerText = values[getRandomValue(values)], newTime * 500);
+  animationId = setInterval(() => {
+    displayBar.innerText = values[getRandomValue(values)];
+  });
 
   return animationId;
 };
+
+/**
+ * find all start buttons, then find their parent nodes (spinners)
+ * on click launch scroll function
+ */
 
 const startButtonsHandler = () => {
   const spinners = document.querySelectorAll('.spinner');
@@ -66,37 +70,38 @@ const startButtonsHandler = () => {
 
         state.running = true;
         document.documentElement.style.setProperty('--speed', 5);
-        const newTime = 0.1;
-        updateAnimation(newTime, bar);
+        updateAnimation(bar);
 
         bar.classList.add('down');
-        startButton.setAttribute('disabled', true);
+        startButton.classList.add('disabled');
 
-        let currentTime = (6 - 5) * 1000;
-        let currentValue = 5;
-        let stepValue = currentTime / 5;
-        let initTime = (parseInt(Math.random() * 5, 10) + 1) * 1000;
-        let inter = 500;
+        const initTime = 5000; // in average 7 seconds of rolling
+        const inter = 500;
 
         const init = () => {
           setTimeout(() => {
-            document.documentElement.style.setProperty('--speed', parseInt(currentValue - stepValue, 10));
+            document.documentElement.style.setProperty('--speed', 5);
             setTimeout(() => {
-              document.documentElement.style.setProperty('--speed', parseInt(currentValue - (2 * stepValue), 10));
+              document.documentElement.style.setProperty('--speed', 4);
               setTimeout(() => {
-                document.documentElement.style.setProperty('--speed', parseInt(currentValue - (3 * stepValue), 10));
+                document.documentElement.style.setProperty('--speed', 3);
                 setTimeout(() => {
-                  document.documentElement.style.setProperty('--speed', parseInt(currentValue - (4 * stepValue), 10));
+                  document.documentElement.style.setProperty('--speed', 2);
                   setTimeout(() => {
-                    document.documentElement.style.setProperty('--speed', 6);
+                    document.documentElement.style.setProperty('--speed', 1);
 
                     bar.classList.remove('down');
                     clearInterval(animationId);
 
                     setTimeout(() => {
-                      startButton.setAttribute('disabled', false);
-                      state.running = false;
+                      addWinnerToState(bar, state);
+
+                      console.group('bar text => state.collection.winners');
                       console.log(bar.innerText);
+                      console.log('winners', state.collection.winners);
+                      console.groupEnd();
+
+                      state.running = false;
                     }, 100);
                   }, inter);
                 }, inter);
