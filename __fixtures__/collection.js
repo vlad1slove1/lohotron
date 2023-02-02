@@ -4,6 +4,7 @@ export default [
   {
     name: 'Dan',
     secondName: 'Bilzerian',
+    city: 'Krasnodar',
     phone: '79184829267',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -11,6 +12,7 @@ export default [
   {
     name: 'Phil',
     secondName: 'Ivey',
+    city: 'Sochi',
     phone: '79188812057',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -18,6 +20,7 @@ export default [
   {
     name: 'Iskhan',
     secondName: 'Farha',
+    city: 'Novorossiysk',
     phone: '79187037652',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -25,6 +28,7 @@ export default [
   {
     name: 'Chris',
     secondName: 'Ferguson',
+    city: 'Armavir',
     phone: '79180348860',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -32,6 +36,7 @@ export default [
   {
     name: 'Doyle',
     secondName: 'Brunson',
+    city: 'Yeysk',
     phone: '79183022867',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -39,6 +44,7 @@ export default [
   {
     name: 'Archie',
     secondName: 'Karas',
+    city: 'Kropotkin',
     phone: '79185995478',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -46,6 +52,7 @@ export default [
   {
     name: 'John',
     secondName: 'Heywood',
+    city: 'Slavyansk-na-Kubani',
     phone: '79187283815',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -53,6 +60,7 @@ export default [
   {
     name: 'Cynthia',
     secondName: 'Jay',
+    city: 'Tuapse',
     phone: '79185083787',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -60,6 +68,7 @@ export default [
   {
     name: 'Joe',
     secondName: 'Barefoot',
+    city: 'Tikhoretsk',
     phone: '79188047714',
     prize: '',
     displayName: `Участник #${counter += 1}`,
@@ -67,6 +76,7 @@ export default [
   {
     name: 'William',
     secondName: 'Bergstrom',
+    city: 'Labinsk',
     phone: '79180484276',
     prize: '',
     displayName: `Участник #${counter += 1}`,

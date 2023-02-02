@@ -1,6 +1,10 @@
 import collection from '../__fixtures__/collection.js';
-import { renderSpinners, renderItem } from './render.js';
-import addWinnerToState from './addWinnerToState.js';
+import {
+  renderSpinners,
+  renderItem,
+  renderWinners,
+} from './render.js';
+import { addWinnerToState, removeWinnerFromCollection } from './utils.js';
 
 const state = {
   running: false,
@@ -82,11 +86,8 @@ export default () => {
 
                       setTimeout(() => {
                         addWinnerToState(bar, state);
-
-                        console.group('bar text => state.collection.winners');
-                        console.log(bar.innerText);
-                        console.log('winners', state.collection.winners);
-                        console.groupEnd();
+                        removeWinnerFromCollection(state);
+                        renderWinners(state);
 
                         state.running = false;
                       }, 100);

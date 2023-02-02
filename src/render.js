@@ -1,8 +1,14 @@
+import { hideTelNumber } from './utils.js';
+
 const container = document.querySelector('.container');
 const defaultSlot = '❓ ❓ ❓ ❓ ❓';
 let spinnerIdCount = 1;
 
 export const renderSpinners = (spinnersCount) => {
+  const winnerEl = document.createElement('div');
+  winnerEl.classList.add('winners');
+  container.append(winnerEl);
+
   for (let i = 0; i < spinnersCount; i += 1) {
     const spinner = document.createElement('div');
     spinner.classList.add('spinner');
@@ -43,4 +49,29 @@ export const renderItem = (spinner) => {
 
   buttons.append(startButton, resetButton);
   spinner.append(wheel, buttons);
+};
+
+export const renderWinners = (state) => {
+  const winnersBar = document.querySelector('.winners');
+  winnersBar.innerHTML = '';
+  winnersBar.textContent = 'Победители';
+
+  const modalTitle = document.querySelector('.modal-title');
+  const modalBody = document.querySelector('.modal-body');
+
+  const { winners } = state.collection;
+
+  winners.forEach((winner) => {
+    const modalItem = document.createElement('button');
+    modalItem.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    modalItem.setAttribute('type', 'button');
+    modalItem.setAttribute('data-bs-toggle', 'modal');
+    modalItem.setAttribute('data-bs-target', '#modal');
+    modalItem.textContent = winner.displayName;
+
+    modalTitle.textContent = winner.displayName;
+    modalBody.textContent = `${winner.name} ${winner.secondName}\nгород: ${winner.city}\nтел.: ${hideTelNumber(winner.phone)}`;
+
+    winnersBar.append(modalItem);
+  });
 };
