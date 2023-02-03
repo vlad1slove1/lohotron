@@ -12,8 +12,7 @@ export const addWinnerToState = (bar, state) => {
 };
 
 export const removeWinnerFromCollection = (state) => {
-  let { participants } = state.collection;
-  const { winners } = state.collection;
+  const { participants, winners } = state.collection;
 
   const winnersNames = [];
   winners.forEach((winner) => {
@@ -26,7 +25,9 @@ export const removeWinnerFromCollection = (state) => {
     return !winnersNames.includes(participantName);
   });
 
-  participants = filteredCollection;
+  // mutating participants collection
+  // eslint-disable-next-line no-param-reassign
+  state.collection.participants = filteredCollection;
 };
 
 export const hideTelNumber = (phone) => Array.from(phone).reduceRight((ctx, char) => {

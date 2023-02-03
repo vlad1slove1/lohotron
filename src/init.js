@@ -15,22 +15,6 @@ const state = {
   },
 };
 
-const values = state.collection.participants.map((participant) => participant.displayName);
-const getRandomValue = () => Math.floor(Math.random() * values.length);
-
-let animationId;
-const updateAnimation = (bar) => {
-  const displayBar = bar;
-
-  if (animationId) clearInterval(animationId);
-
-  animationId = setInterval(() => {
-    displayBar.innerText = values[getRandomValue(values)];
-  });
-
-  return animationId;
-};
-
 export default () => {
   // rendering spinners, according to state.spinnersCount
   renderSpinners(state.spinnersCount);
@@ -56,6 +40,23 @@ export default () => {
 
         // start buttons handler (init spinner)
         if (target.classList.contains('start-btn')) {
+          const values = state.collection.participants
+            .map((participant) => participant.displayName);
+          const getRandomValue = () => Math.floor(Math.random() * values.length);
+
+          let animationId;
+          const updateAnimation = (bar) => {
+            const displayBar = bar;
+
+            if (animationId) clearInterval(animationId);
+
+            animationId = setInterval(() => {
+              displayBar.innerText = values[getRandomValue(values)];
+            });
+
+            return animationId;
+          };
+
           const parentSpinner = target.closest('div').parentNode;
           const bar = parentSpinner.querySelector('.bar');
 

@@ -6,7 +6,7 @@ let spinnerIdCount = 1;
 
 export const renderSpinners = (spinnersCount) => {
   const winnerEl = document.createElement('div');
-  winnerEl.classList.add('winners');
+  winnerEl.classList.add('winners', 'fw-bold');
   container.append(winnerEl);
 
   for (let i = 0; i < spinnersCount; i += 1) {
@@ -54,24 +54,66 @@ export const renderItem = (spinner) => {
 export const renderWinners = (state) => {
   const winnersBar = document.querySelector('.winners');
   winnersBar.innerHTML = '';
-  winnersBar.textContent = 'Победители';
 
-  const modalTitle = document.querySelector('.modal-title');
-  const modalBody = document.querySelector('.modal-body');
+  let modalIDCounter = 1;
+  winnersBar.textContent = 'Победители';
 
   const { winners } = state.collection;
 
   winners.forEach((winner) => {
-    const modalItem = document.createElement('button');
-    modalItem.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    modalItem.setAttribute('type', 'button');
-    modalItem.setAttribute('data-bs-toggle', 'modal');
-    modalItem.setAttribute('data-bs-target', '#modal');
-    modalItem.textContent = winner.displayName;
+    const commentModalButton = document.createComment(`Button-${modalIDCounter} trigger modal`);
 
-    modalTitle.textContent = winner.displayName;
-    modalBody.textContent = `${winner.name} ${winner.secondName}\nгород: ${winner.city}\nтел.: ${hideTelNumber(winner.phone)}`;
+    const modalButton = document.createElement('button');
+    modalButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    modalButton.setAttribute('type', 'button');
+    modalButton.setAttribute('data-bs-toggle', 'modal');
+    modalButton.setAttribute('data-bs-target', `#modal-${modalIDCounter}`);
+    modalButton.textContent = winner.displayName;
 
-    winnersBar.append(modalItem);
+    const commentModalDiv = document.createComment(`Modal-${modalIDCounter}`);
+
+    const modalDiv = document.createElement('div');
+    modalDiv.classList.add('modal', 'fade');
+    modalDiv.setAttribute('id', `modal-${modalIDCounter}`);
+    modalDiv.setAttribute('role', 'dialog');
+    modalDiv.setAttribute('tabindex', '-1');
+    modalDiv.setAttribute('aria-labelledby', 'modal');
+    modalDiv.setAttribute('aria-hidden', 'true');
+
+    const modalDialog = document.createElement('div');
+    modalDialog.classList.add('modal-dialog');
+    modalDialog.setAttribute('role', 'document');
+
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-content');
+
+    const modalHeader = document.createElement('div');
+    modalHeader.classList.add('modal-header');
+
+    const h5 = document.createElement('h5');
+    h5.classList.add('modal-title', 'fw-bold');
+    h5.textContent = winner.displayName;
+    modalHeader.append(h5);
+
+    const modalBody = document.createElement('div');
+    modalBody.classList.add('modal-body', 'fw-normal', 'font-monospace');
+    modalBody.innerText = `${winner.name} ${winner.secondName}\nгород: ${winner.city}\nтел.: ${hideTelNumber(winner.phone)}`;
+
+    const modalFooter = document.createElement('div');
+    modalFooter.classList.add('modal-footer');
+
+    const footerButton = document.createElement('button');
+    footerButton.classList.add('btn', 'btn-secondary');
+    footerButton.setAttribute('type', 'button');
+    footerButton.setAttribute('data-bs-dismiss', 'modal');
+    footerButton.textContent = 'Закрыть';
+    modalFooter.append(footerButton);
+
+    modalContent.append(modalHeader, modalBody, modalFooter);
+    modalDialog.append(modalContent);
+    modalDiv.append(modalDialog);
+
+    modalIDCounter += 1;
+    winnersBar.append(commentModalButton, modalButton, commentModalDiv, modalDiv);
   });
 };
