@@ -1,4 +1,5 @@
-import collection from '../__fixtures__/collection.js';
+import participants from '../__fixtures__/participants.js';
+import blackList from '../__fixtures__/blackList.js';
 import {
   renderSpinners,
   renderItem,
@@ -10,8 +11,8 @@ const state = {
   running: false,
   spinnersCount: 2,
   collection: {
-    participants: collection, // array of objects [{}, {}, {} ...];
-    winners: [], // array of objects [{}, {}, {} ...];
+    participants, // array of objects [{}, {}, {} ...];
+    winners: [],
   },
 };
 
@@ -48,60 +49,45 @@ export default () => {
           const updateAnimation = (bar) => {
             const displayBar = bar;
 
-            if (animationId) clearInterval(animationId);
+            const blackListColl = blackList.map((item) => item.displayName);
+            const filteredParticipants = values.filter((item) => !blackListColl.includes(item));
 
             animationId = setInterval(() => {
-              displayBar.innerText = values[getRandomValue(values)];
-            });
+              const currentWinner = values[getRandomValue()];
 
-            return animationId;
+              if (blackListColl.includes(currentWinner)) {
+                displayBar.textContent = filteredParticipants[getRandomValue()];
+                return;
+              }
+
+              displayBar.textContent = currentWinner;
+            }, 100);
           };
 
           const parentSpinner = target.closest('div').parentNode;
           const bar = parentSpinner.querySelector('.bar');
 
           state.running = true;
-          document.documentElement.style.setProperty('--speed', 5);
           updateAnimation(bar);
 
-          bar.classList.add('down');
           target.classList.add('disabled');
 
-          const initTime = 5000; // in average 7 seconds of rolling
-          const inter = 500;
+          const initTime = 5000;
 
-          const init = () => {
-            setTimeout(() => {
-              document.documentElement.style.setProperty('--speed', 5);
-              setTimeout(() => {
-                document.documentElement.style.setProperty('--speed', 4);
-                setTimeout(() => {
-                  document.documentElement.style.setProperty('--speed', 3);
-                  setTimeout(() => {
-                    document.documentElement.style.setProperty('--speed', 2);
-                    setTimeout(() => {
-                      document.documentElement.style.setProperty('--speed', 1);
+          const init = setTimeout(() => {
+            clearInterval(animationId);
+            addWinnerToState(bar, state);
+            removeWinnerFromCollection(state);
+            renderWinners(state);
 
-                      bar.classList.remove('down');
-                      clearInterval(animationId);
+            state.running = false;
+          }, initTime);
 
-                      setTimeout(() => {
-                        addWinnerToState(bar, state);
-                        removeWinnerFromCollection(state);
-                        renderWinners(state);
-
-                        state.running = false;
-                      }, 100);
-                    }, inter);
-                  }, inter);
-                }, inter);
-              }, inter);
-            }, initTime);
-          };
-
-          init();
+          return init;
         }
       }
+
+      return false;
     });
   });
 };
